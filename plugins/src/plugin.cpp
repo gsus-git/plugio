@@ -1,14 +1,14 @@
 #include <iostream>
 
 #include "plugin.hpp"
-#include "specServer.hpp"
+#include "specServerProxy.hpp"
 
 namespace plugio::plugin
 {
 
 Plugin::Plugin()
 {
-    std::shared_ptr<SpecServer> specServer;
+    std::shared_ptr<SpecServerProxy> SpecServerProxy;
 
     std::cout << "VERBOSE: Plugin constructor" << std::endl;
 }
@@ -30,7 +30,7 @@ void destroy(plugio::plugin::Plugin * p)
 
 void onInBChange(void * specServerContext, int signal, const char * value)
 {
-    static_cast<plugio::plugin::SpecServer *>(specServerContext)->onInChange(signal, value);
+    static_cast<plugio::plugin::SpecServerProxy *>(specServerContext)->onInChange(signal, value);
 }
 
 }

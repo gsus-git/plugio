@@ -23,7 +23,7 @@ private:
     const std::string value_;
 };
 
-class SpecServer
+class SpecServerProxy
 {
 public:
 
@@ -33,8 +33,8 @@ public:
         virtual void onInChange(int signal, SignalValue value) = 0;
     };
 
-    SpecServer(void * specContext);
-    virtual ~SpecServer();
+    SpecServerProxy(void * specContext);
+    virtual ~SpecServerProxy();
 
     SignalValue readInSignal(int signal) const;
 
@@ -47,7 +47,7 @@ public:
     void onInChange(int signal, SignalValue value);
 
 private:
-    SpecServer() = delete;
+    SpecServerProxy() = delete;
     void * specContext_;
     std::vector<IInChangeSubscriber*> subscribers_;
 };

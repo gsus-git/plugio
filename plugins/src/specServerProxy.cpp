@@ -1,4 +1,4 @@
-#include "specServer.hpp"
+#include "specServerProxy.hpp"
 #include "plugin.hpp"
 
 extern void readSignal(void *, int, char *);
@@ -34,41 +34,41 @@ const std::string & SignalValue::asStr() const
     return value_;
 }
 
-SpecServer::SpecServer(void * specContext) :
+SpecServerProxy::SpecServerProxy(void * specContext) :
     specContext_(specContext) 
 { }
 
-SpecServer::~SpecServer() 
+SpecServerProxy::~SpecServerProxy() 
 { }
 
-SignalValue SpecServer::readInSignal(int signal) const
+SignalValue SpecServerProxy::readInSignal(int signal) const
 {
     char data[128];
     readSignal(specContext_, signal, &data[0]);
     return SignalValue(&data[0]);
 }
 
-void SpecServer::writeOutSignal(int signal, bool value)
+void SpecServerProxy::writeOutSignal(int signal, bool value)
 {
     writeSignal(specContext_, signal, SignalValue(value).asStr().c_str());
 }
 
-void SpecServer::writeOutSignal(int signal, double value)
+void SpecServerProxy::writeOutSignal(int signal, double value)
 {
     writeSignal(specContext_, signal, SignalValue(value).asStr().c_str());
 }
 
-void SpecServer::writeOutSignal(int signal, const std::string & value)
+void SpecServerProxy::writeOutSignal(int signal, const std::string & value)
 {
     writeSignal(specContext_, signal, SignalValue(value).asStr().c_str());
 }
 
-void SpecServer::subscribe(SpecServer::IInChangeSubscriber * subscriber)
+void SpecServerProxy::subscribe(SpecServerProxy::IInChangeSubscriber * subscriber)
 {
     subscribers_.push_back(subscriber);
 }
 
-void SpecServer::onInChange(int signal, SignalValue value)
+void SpecServerProxy::onInChange(int signal, SignalValue value)
 {
     for (auto subscriber : subscribers_)
     {

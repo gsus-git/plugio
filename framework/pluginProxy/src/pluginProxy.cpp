@@ -1,4 +1,4 @@
-#include "specServerProxy.hpp"
+#include "specServer.hpp"
 #include "pluginProxy.hpp"
 #include "plugin.hpp"
 
@@ -7,14 +7,14 @@
 extern "C"
 {
     // signals
-    void readInSignal(void * specServerProxyContext, int signal, char * value)
+    void readInSignal(void * specServerContext, int signal, char * value)
     {
-        static_cast<plugio::framework::core::SpecServerProxy*>(specServerProxyContext)->readInSignal(signal, value);
+        static_cast<plugio::framework::core::SpecServer*>(specServerContext)->readInSignal(signal, value);
     }
 
-    void writeOutSignal(void * specServerProxyContext, int signal, const char * value)
+    void writeOutSignal(void * specServerContext, int signal, const char * value)
     {
-        static_cast<plugio::framework::core::SpecServerProxy*>(specServerProxyContext)->writeOutSignal(signal, value);
+        static_cast<plugio::framework::core::SpecServer*>(specServerContext)->writeOutSignal(signal, value);
     }
 }
 

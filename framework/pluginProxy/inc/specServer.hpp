@@ -5,17 +5,14 @@
 
 namespace plugio::framework::core {
 
-class SpecServerProxy
+class SpecServer
 {
 public:
-    SpecServerProxy();
-    virtual ~SpecServerProxy() {}
+    SpecServer();
+    virtual ~SpecServer() {}
 
     void readInSignal(int signal, char * value) const;
-
     void writeOutSignal(int signal, const char * value);
-
-private:
 };
 
 }

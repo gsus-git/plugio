@@ -9,8 +9,8 @@ namespace plugio::framework::core {
 const std::string PackageManager::PACKAGE_LOCATION_PATH = "/home/pi/packages";
 const std::string PackageManager::MANIFEST_FILE_NAME = "manifest.xml";
 
-PackageManager::PackageManager(PluginLoader * pluginLoader) : 
-    pluginLoader_(pluginLoader)
+PackageManager::PackageManager(PluginLibLoader * pluginLibLoader) : 
+    pluginLoader_(pluginLibLoader)
 { }
 
 PackageManager::~PackageManager()

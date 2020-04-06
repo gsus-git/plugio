@@ -4,19 +4,7 @@
 
 #include <iostream>
 
-extern "C"
-{
-    // signals
-    void readInSignal(void * specServerContext, int signal, char * value)
-    {
-        static_cast<plugio::framework::core::SpecServer*>(specServerContext)->readInSignal(signal, value);
-    }
 
-    void writeOutSignal(void * specServerContext, int signal, const char * value)
-    {
-        static_cast<plugio::framework::core::SpecServer*>(specServerContext)->writeOutSignal(signal, value);
-    }
-}
 
 namespace plugio::framework::core {
 

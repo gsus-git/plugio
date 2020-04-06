@@ -1,9 +1,9 @@
 add_library(packageManager STATIC 
     inc/packageManager.hpp 
-    inc/pluginLoader.hpp 
+    inc/pluginLibLoader.hpp 
     inc/packageManifest.hpp
     src/packageManager.cpp 
-    src/pluginLoader.cpp
+    src/pluginLibLoader.cpp
     src/packageManifest.cpp)
 target_include_directories(packageManager PUBLIC "${PROJECT_SOURCE_DIR}/framework/packageManager/inc")
 target_link_libraries(

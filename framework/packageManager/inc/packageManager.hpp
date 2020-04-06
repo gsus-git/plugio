@@ -2,7 +2,7 @@
 #define PACKAGEMANAGER_HPP
 
 #include "packageManager.hpp"
-#include "pluginLoader.hpp"
+#include "pluginLibLoader.hpp"
 
 #include <map>
 #include <memory>
@@ -37,7 +37,7 @@ public:
     /**
      * Constructor
      */
-    PackageManager(PluginLoader * pluginLoader);
+    PackageManager(PluginLibLoader * pluginLoader);
 
     virtual ~PackageManager();
 
@@ -70,7 +70,7 @@ public:
      *
      * @return a collection with the info about the packages installed
      */
-    std::map<PackageInfo::PackageId, std::pair<PluginLoader::PluginLibId, PackageInfo>> getPackages() const;
+    std::map<PackageInfo::PackageId, std::pair<PluginLibLoader::PluginLibId, PackageInfo>> getPackages() const;
 
 private:
     PackageManager() = delete;
@@ -79,8 +79,8 @@ private:
     const static std::string MANIFEST_FILE_NAME;
 
     std::mutex mutex_;
-    PluginLoader * pluginLoader_;
-    std::map<PackageInfo::PackageId, std::pair<PluginLoader::PluginLibId, PackageInfo>> packagesMap_;
+    PluginLibLoader * pluginLoader_;
+    std::map<PackageInfo::PackageId, std::pair<PluginLibLoader::PluginLibId, PackageInfo>> packagesMap_;
 
     bool getPackageInfo(const std::string & packagePath, PackageInfo & packageInfo);
     bool hasTarGzExtension(const std::filesystem::path & pathFs);

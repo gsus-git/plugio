@@ -1,5 +1,5 @@
-#ifndef PLUGINLOADER_HPP
-#define PLUGINLOADER_HPP
+#ifndef PLUGINLIBLOADER_HPP
+#define PLUGINLIBLOADER_HPP
 
 #include "pluginProxy.hpp"
 #include "plugin.hpp"
@@ -13,13 +13,13 @@
 
 namespace plugio::framework::core {
 
-class PluginLoader
+class PluginLibLoader
 {
 public:
     using PluginLibId = size_t;
     
-    PluginLoader();
-    virtual ~PluginLoader();
+    PluginLibLoader();
+    virtual ~PluginLibLoader();
 
     /**
      * Add a type of plugin into the system. Once the plugin has been added, this type 
@@ -81,4 +81,4 @@ private:
 
 }
 
-#endif // PLUGINLOADER_HPP
+#endif // PLUGINLIBLOADER_HPP

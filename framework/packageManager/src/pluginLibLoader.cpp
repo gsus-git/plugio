@@ -1,19 +1,19 @@
-#include "pluginLoader.hpp"
+#include "pluginLibLoader.hpp"
 #include "plugin.hpp"
 
 #include <filesystem>
 
 namespace plugio::framework::core {
 
-PluginLoader::PluginLoader() :
+PluginLibLoader::PluginLibLoader() :
     pluginLibIdCounter_(0)
 { }
 
-PluginLoader::~PluginLoader() 
+PluginLibLoader::~PluginLibLoader() 
 {
 }
 
-PluginLoader::PluginLibId PluginLoader::addPluginLib(const std::string & path)
+PluginLibLoader::PluginLibId PluginLibLoader::addPluginLib(const std::string & path)
 {
     if (!std::filesystem::exists(path))
     {
@@ -44,7 +44,7 @@ PluginLoader::PluginLibId PluginLoader::addPluginLib(const std::string & path)
     return pluginLibIdCounter_;
 }
 
-bool PluginLoader::removePluginLib(PluginLibId id)
+bool PluginLibLoader::removePluginLib(PluginLibId id)
 {
     auto libDescriptorIt = libDescriptorsMap_.find(id);
     if (libDescriptorIt == libDescriptorsMap_.end())
@@ -66,7 +66,7 @@ bool PluginLoader::removePluginLib(PluginLibId id)
     return true;
 }
 
-std::shared_ptr<PluginProxy> PluginLoader::createInstance(PluginLibId id)
+std::shared_ptr<PluginProxy> PluginLibLoader::createInstance(PluginLibId id)
 {
     auto libDescriptorIt = libDescriptorsMap_.find(id);
     if (libDescriptorIt == libDescriptorsMap_.end())
@@ -80,7 +80,7 @@ std::shared_ptr<PluginProxy> PluginLoader::createInstance(PluginLibId id)
     return pluginProxy;
 }
 
-bool PluginLoader::isPluginLibInUse(PluginLoader::PluginLibId id)
+bool PluginLibLoader::isPluginLibInUse(PluginLibLoader::PluginLibId id)
 {
     auto libDescriptorIt = libDescriptorsMap_.find(id);
     if (libDescriptorIt == libDescriptorsMap_.end())

@@ -3,11 +3,11 @@
 #include <memory>
 
 #include "packageManager.hpp"
-#include "pluginLoader.hpp"
+#include "pluginLibLoader.hpp"
 
 int main(int argc, char *argv[])
 {
-    plugio::framework::core::PluginLoader pl;
+    plugio::framework::core::PluginLibLoader pl;
     plugio::framework::core::PackageManager pm(&pl);
 
     std::cout << "-----------initializing----------" << std::endl;

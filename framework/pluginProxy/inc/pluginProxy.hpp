@@ -8,6 +8,12 @@
 
 namespace plugio::framework::core {
 
+class SpecApi
+{
+public:
+    plugin::onInChangeFn * onInChange;
+};
+
 class PluginApi
 {
 public:
@@ -16,12 +22,7 @@ public:
     plugin::destroyPluginFn * destructor;
     
     // signals
-    plugin::setReadInSignalBFn * setReadInSignalB;
-    plugin::setReadInSignalNFn * setReadInSignalN;
-    plugin::setReadInSignalSFn * setReadInSignalS;
-    plugin::setWriteOutSignalBFn * setWriteOutSignalB;
-    plugin::setWriteOutSignalNFn * setWriteOutSignalN;
-    plugin::setWriteOutSignalSFn * setWriteOutSignalS;
+    SpecApi specApi;
 };
 
 class PluginProxy

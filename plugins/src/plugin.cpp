@@ -1,12 +1,15 @@
 #include <iostream>
 
 #include "plugin.hpp"
+#include "specServer.hpp"
 
 namespace plugio::plugin
 {
 
 Plugin::Plugin()
 {
+    std::shared_ptr<SpecServer> specServer;
+
     std::cout << "VERBOSE: Plugin constructor" << std::endl;
 }
 
@@ -20,52 +23,12 @@ Plugin::~Plugin()
 extern "C" 
 {
 
-void destroy(Plugin* p)
+void destroy(plugio::plugin::Plugin * p)
 {
     delete p;
 }
 
-void setReadInSignalB(readSignalBFn)
-{
-    Plugin::readInSignalB = readSignalBFn;
-}
-
-void setReadInSignalN(readSignalNFn)
-{
-    Plugin::readInSignalN = readSignalNFn;
-}
-
-void setReadInSignalS(readSignalSFn)
-{
-    Plugin::readInSignalS = readSignalSFn;
-}
-
-void setwriteOutSignalB(writeOutSignalBFn)
-{
-    Plugin::writeOutSignalB = writeOutSignalBFn;
-}
-
-void setwriteOutSignalN(writeOutSignalNFn)
-{
-    Plugin::writeOutSignalN = writeOutSignalNFn;
-}
-
-void setwriteOutSignalS(writeOutSignalSFn)
-{
-    Plugin::writeOutSignalS = writeOutSignalSFn;
-}
-
-void onInBChange(void * specServerContext, int signal, bool value)
-{
-    static_cast<plugio::plugin::SpecServer *>(specServerContext)->onInChange(signal, value);
-}
-
-void onInNChange(void * specServerContext, int signal, double value)
-{
-    static_cast<plugio::plugin::SpecServer *>(specServerContext)->onInChange(signal, value);
-}
-
-void onInSChange(void * specServerContext, int signal, const char * value)
+void onInBChange(void * specServerContext, int signal, const char * value)
 {
     static_cast<plugio::plugin::SpecServer *>(specServerContext)->onInChange(signal, value);
 }

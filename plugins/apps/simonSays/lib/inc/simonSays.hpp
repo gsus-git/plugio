@@ -2,7 +2,6 @@
 #define SIMONSAYS_HPP
 
 #include "plugin.hpp"
-#include "logger.hpp"
 
 #include <iostream>
 

@@ -12,56 +12,24 @@
 
 namespace plugio::framework::core {
 
-class SignalBase
+/**
+ * A signal holds a state and when it changes, the observers are notified.
+ */
+class Signal
 {
 public:
     using ConnectionId = uint32_t;
     using SignalId     = size_t;
 
-    static const ConnectionId InvalidConnectionId = 0;
-
-    SignalBase(SignalId id) : 
-        id_(id) 
-    {}
-
-    virtual ~SignalBase()
-    {
-        std::cout << "Destroying SignalBase" << std::endl;
-    }
-
-    ConnectionId connect(std::function<void(Boolean)> slot)
-    {
-        std::cout << "Error: This signal does not support Boolean" << std::endl;
-        return InvalidConnectionId;
-    }
-
-    ConnectionId connect(std::function<void(Number)> slot)
-    {
-        std::cout << "Error: This signal does not support Number" << std::endl;
-        return InvalidConnectionId;
-    }
-
-protected:
-    // signal id
-    SignalId id_;
-};
-
-/**
- * A signal holds a state and when it changes, the observers are notified.
- */
-template<typename T>
-class Signal : public SignalBase
-{
-public:
     /**
      * Constructor.
      *
      * @param value is the initial value of the signal when it is created
      */
-    Signal(SignalId id, T value) :
+    Signal(SignalId id, const std::string & value) :
         value_(value),
         connectionIdCounter_(0),
-        SignalBase(id)
+        id_(id)
     {}
 
     Signal() = delete;
@@ -80,7 +48,7 @@ public:
      *
      * @param value is the new value of the signal.
      */
-    void set(T value)
+    void set(const std::string & value)
     {
         std::scoped_lock<std::mutex> lock(mutex_);
         
@@ -98,7 +66,7 @@ public:
      *
      * @return the current value.
      */
-    T get() const
+    std::string get() const
     {
         std::scoped_lock<std::mutex> lock(mutex_);
 
@@ -111,12 +79,12 @@ public:
      * @param callback.
      * @return the connection id. Needed to unsubscribe.
      */
-    ConnectionId connect(std::function<void(T)> slot)
+    ConnectionId connect(std::function<void(const std::string &)> slot)
     {
         std::scoped_lock<std::mutex> lock(mutex_);
         
         ConnectionId id = ++connectionIdCounter_;
-        slots_.insert(std::pair<ConnectionId, std::function<void(T)>>(id, slot));
+        slots_.insert(std::pair<ConnectionId, std::function<void(const std::string &)>>(id, slot));
         return id;
     }
     
@@ -154,11 +122,13 @@ private:
     // mutex
     mutable std::mutex mutex_;
     // variable holding the current value of the signal
-    T value_;
+    std::string value_;
     // id assign to connections
     ConnectionId connectionIdCounter_;
+    // this signal id
+    SignalId id_;
     // list of slots called when the state of the signal changes
-    std::map<ConnectionId, std::function<void(T)>> slots_;
+    std::map<ConnectionId, std::function<void(std::string)>> slots_;
 };
 
 }

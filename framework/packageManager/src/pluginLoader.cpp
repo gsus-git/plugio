@@ -29,19 +29,13 @@ PluginLoader::PluginLibId PluginLoader::addPluginLib(const std::string & path)
         std::cout << "Cannot load library: " << dlerror() << std::endl;
         return 0;
     }
-    // reset erros
-    dlerror();
 
     // load constructor and destructor symbols
-    loadSymbol("create", libDescriptor.handle, libDescriptor.pluginApi.constructor);
+    loadSymbol("create",  libDescriptor.handle, libDescriptor.pluginApi.constructor);
     loadSymbol("destroy", libDescriptor.handle, libDescriptor.pluginApi.destructor);
 
-    loadSymbol("setPApiSetSignalBFn", libDescriptor.handle, libDescriptor.pluginApi.setPApiSetSignalB);
-    loadSymbol("setPApiSetSignalNFn", libDescriptor.handle, libDescriptor.pluginApi.setPApiSetSignalN);
-    loadSymbol("setPApiSetSignalSFn", libDescriptor.handle, libDescriptor.pluginApi.setPApiSetSignalS);
-    loadSymbol("setPApiGetSignalBFn", libDescriptor.handle, libDescriptor.pluginApi.setPApiGetSignalB);
-    loadSymbol("setPApiGetSignalNFn", libDescriptor.handle, libDescriptor.pluginApi.setPApiGetSignalN);
-    loadSymbol("setPApiGetSignalSFn", libDescriptor.handle, libDescriptor.pluginApi.setPApiGetSignalS);
+    // notify signal changes
+    loadSymbol("onInChange", libDescriptor.handle, libDescriptor.pluginApi.specApi.onInChange);
 
     pluginLibIdCounter_++;
     libDescriptorsMap_.insert(std::make_pair(pluginLibIdCounter_, libDescriptor));

@@ -1,4 +1,4 @@
-#include "signal.hpp"
+#include "specServerProxy.hpp"
 #include "pluginProxy.hpp"
 #include "plugin.hpp"
 
@@ -6,40 +6,15 @@
 
 extern "C"
 {
-    uint32_t p_api_getApiVersion(void * pluginProxyContext_)
-    {
-        return 1;
-    }
-
     // signals
-    bool readInSignalB(void * specServerProxyContext, int signal, bool & value)
+    void readInSignal(void * specServerProxyContext, int signal, char * value)
     {
-        return static_cast<SpecServerProxy*>(specServerProxyContext)->readIn(signal, value);
+        static_cast<plugio::framework::core::SpecServerProxy*>(specServerProxyContext)->readInSignal(signal, value);
     }
 
-    bool readInSignalN(void * specServerProxyContext, int signal, double & value)
+    void writeOutSignal(void * specServerProxyContext, int signal, const char * value)
     {
-        return static_cast<SpecServerProxy*>(specServerProxyContext)->readIn(signal, value);
-    }
-
-    bool readInSignalS(void * specServerProxyContext, int signal, const char * value)
-    {
-        return static_cast<SpecServerProxy*>(specServerProxyContext)->readIn(signal, value);
-    }
-
-    bool writeSignalB(void * specServerProxyContext, int signal, bool value)
-    {
-        return static_cast<SpecServerProxy*>(specServerProxyContext)->writeOut(signal, value);
-    }
-
-    bool writeSignalN(void * specServerProxyContext, int signal, double value)
-    {
-        return static_cast<SpecServerProxy*>(specServerProxyContext)->writeOut(signal, value);
-    }
-
-    bool writeSignalS(void * specServerProxyContext, int signal, const char * value)
-    {
-        return static_cast<SpecServerProxy*>(specServerProxyContext)->writeOut(signal, value);
+        static_cast<plugio::framework::core::SpecServerProxy*>(specServerProxyContext)->writeOutSignal(signal, value);
     }
 }
 
@@ -47,28 +22,13 @@ namespace plugio::framework::core {
 
 PluginApi::PluginApi() :
     constructor(nullptr),
-    destructor(nullptr),
-    readInSignalB(nullptr),
-    readInSignalN(nullptr),
-    readInSignalS(nullptr),
-    writeOutSignalB(nullptr),
-    writeOutSignalN(nullptr),
-    writeOutSignalS(nullptr)
+    destructor(nullptr)
  {}
 
 PluginProxy::PluginProxy(const PluginApi & pluginApi) :
     pluginApi_(pluginApi)
 {
     std::cout << "VERBOSE: Constructing PluginProxy" << std::endl;
-    // signal's setters
-    pluginApi_.setReadInSignalB(&readInSignalB);
-    pluginApi_.setReadInSignalN(&readInSignalN);
-    pluginApi_.setReadInSignalS(&readInSignalS);
-    // signal's getters
-    pluginApi_.setWriteOutSignalB(&writeOutSignalB);
-    pluginApi_.setWriteOutSignalN(&swriteOutSignalN);
-    pluginApi_.setWriteOutSignalS(&writeOutSignalS);
-
     plugin_ = pluginApi_.constructor();
 }
 
@@ -97,4 +57,3 @@ bool PluginProxy::stop()
 }
 
 }
-

@@ -6,12 +6,12 @@ namespace lsls {
 
 SimonSays::SimonSays()
 {
-    logInfo("Constructing SimonSays");
+    std::cout << "Constructing SimonSays" << std::endl;
 }
 
 SimonSays::~SimonSays()
 {
-    logInfo("Destroying SimonSays");
+    std::cout << "Destroying SimonSays" << std::endl;
 }
 
 }

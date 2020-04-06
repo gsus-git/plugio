@@ -12,7 +12,6 @@ set(CMAKE_CXX_STANDARD 17)
 # add subdirectories to build
 add_subdirectory(framework/signal)
 add_subdirectory(framework/pluginProxy)
-add_subdirectory(framework/slot)
 add_subdirectory(framework/packageManager)
 
 # plugins
@@ -23,4 +22,4 @@ add_subdirectory(extern/pugixml)
 
 add_subdirectory(apps/mainApp)
 # directory where the unit tests are located
-add_subdirectory(tests)
+# add_subdirectory(tests)

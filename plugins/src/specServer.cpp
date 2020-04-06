@@ -1,70 +1,79 @@
 #include "specServer.hpp"
+#include "plugin.hpp"
+
+extern void readSignal(void *, int, char *);
+extern void writeSignal(void *, int, const char *);
 
 namespace plugio::plugin
 {
-    SpecServer::SpecServer(void * specContext) :
-        specContext_(specContext) 
-    { }
-    
-    SpecServer::~SpecServer() 
-    { }
 
-    bool SpecServer::readInSignal(int signal, bool & value) const
-    {
-        Plugin::readInSignalB(specContext_, signal, value);
-    }
+SignalValue::SignalValue(bool value) :
+    value_(std::to_string(value))
+{ }
 
-    bool SpecServer::readInSignal(int signal, double & value) const
-    {
-        Plugin::readInSignalN(specContext_, signal, value);
-    }
+SignalValue::SignalValue(double value) :
+    value_(std::to_string(value))
+{ }
 
-    bool SpecServer::readInSignal(int signal, const char * value) const
-    {
-        Plugin::readInSignalS(specContext_, signal, value);
-    }
+SignalValue::SignalValue(const std::string value) :
+    value_(value)
+{ }
 
-    bool SpecServer::writeOutSignal(int signal, bool value)
-    {
-        Plugin::writeOutSignalB(specContext_, signal, value);
-    }
+bool SignalValue::asBool() const
+{
+    return std::stoi(value_);
+}
 
-    bool SpecServer::writeOutSignal(int signal, double value)
-    {
-        Plugin::writeOutSignalN(specContext_, signal, value);
-    }
-    
-    bool SpecServer::writeOutSignal(int signal, const char * value)
-    {
-        Plugin::writeOutSignalS(specContext_, signal, value);
-    }
+double SignalValue::asNumber() const
+{
+    return std::stod(value_);
+}
 
-    void SpecServer::subscribe(IInChangeSubscriber * subscriber);
-    {
-        subscribers_.push_back(subscriber);
-    }
+const std::string & SignalValue::asStr() const
+{
+    return value_;
+}
 
-    void onInChange(int signal, bool value)
-    {
-        for (auto subscriber : subscribers_)
-        {
-            subscriber->onInChange(signal, value);
-        }
-    }
+SpecServer::SpecServer(void * specContext) :
+    specContext_(specContext) 
+{ }
 
-    void onInChange(int signal, double value)
-    {
-        for (auto subscriber : subscribers_)
-        {
-            subscriber->onInChange(signal, value);
-        }
-    }
+SpecServer::~SpecServer() 
+{ }
 
-    void onInChange(int signal, const char * value)
+SignalValue SpecServer::readInSignal(int signal) const
+{
+    char data[128];
+    readSignal(specContext_, signal, &data[0]);
+    return SignalValue(&data[0]);
+}
+
+void SpecServer::writeOutSignal(int signal, bool value)
+{
+    writeSignal(specContext_, signal, SignalValue(value).asStr().c_str());
+}
+
+void SpecServer::writeOutSignal(int signal, double value)
+{
+    writeSignal(specContext_, signal, SignalValue(value).asStr().c_str());
+}
+
+void SpecServer::writeOutSignal(int signal, const std::string & value)
+{
+    writeSignal(specContext_, signal, SignalValue(value).asStr().c_str());
+}
+
+void SpecServer::subscribe(SpecServer::IInChangeSubscriber * subscriber)
+{
+    subscribers_.push_back(subscriber);
+}
+
+void SpecServer::onInChange(int signal, SignalValue value)
+{
+    for (auto subscriber : subscribers_)
     {
-        for (auto subscriber : subscribers_)
-        {
-            subscriber->onInChange(signal, value);
-        }
+        subscriber->onInChange(signal, value);
     }
+}
+
 }

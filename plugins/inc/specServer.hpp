@@ -1,13 +1,27 @@
 #ifndef SPECSERVER_HPP
 #define SPECSERVER_HPP
 
-#include "plugin.hpp"
-
 #include <functional>
 #include <vector>
 
 namespace plugio::plugin
 {
+
+class SignalValue
+{
+public:
+    SignalValue(bool value);
+    SignalValue(double value);
+    SignalValue(const std::string value);
+
+    bool asBool() const;
+    double asNumber() const;
+    const std::string & asStr() const;
+
+private:
+    SignalValue() = delete;
+    const std::string value_;
+};
 
 class SpecServer
 {
@@ -15,27 +29,22 @@ public:
 
     class IInChangeSubscriber
     {
-        virtual void onInChange(int signal, bool value) { };
-        virtual void onInChange(int signal, double value) { };
-        virtual void onInChange(int signal, const char * value) { };
+    public:
+        virtual void onInChange(int signal, SignalValue value) = 0;
     };
 
-    explicit SpecServer(void * specContext);
-    virtual ~SpecServer() { }
+    SpecServer(void * specContext);
+    virtual ~SpecServer();
 
-    bool readInSignal(int signal, bool & value) const;
-    bool readInSignal(int signal, double & value) const;
-    bool readInSignal(int signal, const char * value) const;
+    SignalValue readInSignal(int signal) const;
 
-    bool writeOutSignal(int signal, bool value);
-    bool writeOutSignal(int signal, double value);
-    bool writeOutSignal(int signal, const char * value);
+    void writeOutSignal(int signal, bool value);
+    void writeOutSignal(int signal, double value);
+    void writeOutSignal(int signal, const std::string & value);
     
     void subscribe(IInChangeSubscriber * subscriber);
 
-    void onInChange(int signal, bool value);
-    void onInChange(int signal, double value);
-    void onInChange(int signal, const char * value);
+    void onInChange(int signal, SignalValue value);
 
 private:
     SpecServer() = delete;
